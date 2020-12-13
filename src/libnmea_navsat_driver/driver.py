@@ -349,9 +349,12 @@ class RosNMEADriver(object):
         frame_id = rospy.get_param('~frame_id', 'gps')
         # Add the TF prefix
         prefix = ""
-        prefix_param = rospy.search_param('tf_prefix')
-        if prefix_param:
-            prefix = rospy.get_param(prefix_param)
-            return "%s/%s" % (prefix, frame_id)
-        else:
-            return frame_id
+        
+        use_tf_prefix = rospy.get_param('~use_tf_prefix', 'False')
+        if use_tf_prefix:
+            prefix_param = rospy.search_param('tf_prefix')
+            if prefix_param:
+                prefix = rospy.get_param(prefix_param)
+                return "%s/%s" % (prefix, frame_id)       
+        
+        return frame_id
